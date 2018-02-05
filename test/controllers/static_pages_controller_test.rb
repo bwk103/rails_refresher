@@ -18,7 +18,8 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
 
   test "should have home title" do
     get static_pages_home_url
-    assert_select "title", "Home | " + @base_title
+    assert_response :success
+    assert_select "title", @base_title
   end
 
   test "should get help" do

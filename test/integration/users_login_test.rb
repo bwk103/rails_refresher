@@ -18,7 +18,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert flash.empty?
   end
 
-  test 'valid login' do
+  test 'valid login followed by logout' do
     get login_path
     post login_path, params: { session: {
                                           email: @user.email,
@@ -31,9 +31,24 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", user_path(@user)
     assert_select "a[href=?]", logout_path
     delete logout_path
-    assert_redirected_to root_path
     assert_not is_logged_in?
+    assert_redirected_to root_path
+    delete logout_path
+    follow_redirect!
+    assert_select "a[href=?]", login_path
     assert_select "a[href=?]", logout_path, count: 0
     assert_select "a[href=?]", user_path(@user), count: 0
+  end
+
+  test 'valid login with remember_me' do
+    log_in_as(@user)
+    assert_not_empty cookies['remember_token']
+    assert_equal cookies['remember_token'], assigns(:user).remember_token
+  end
+
+  test 'valid login without remember_me' do
+    log_in_as(@user, remember_me: '1')
+    log_in_as(@user, remember_me: '0')
+    assert_empty cookies['remember_token']
   end
 end

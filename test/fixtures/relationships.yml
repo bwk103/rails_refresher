@@ -1,0 +1,11 @@
+one:
+  follower: michael
+  followed: bob
+
+three:
+  follower: lana
+  followed: michael
+
+four:
+  follower: archer
+  followed: michael

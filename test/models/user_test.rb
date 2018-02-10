@@ -13,7 +13,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'it does not allow for empty names' do
     @user.name = ''
-    assert_not @user.valid?
+    assert_not @user.valid? 
   end
 
   test 'it does not allow email to be empty' do
